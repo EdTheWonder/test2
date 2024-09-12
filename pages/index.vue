@@ -13,6 +13,12 @@
 <script setup>
 import MainLayout from '~/layouts/MainLayout.vue';
 import { useUserStore } from '~/stores/user';
+import { useRuntimeConfig } from '#app';
+
+const config = useRuntimeConfig();
+const supabaseUrl = config.public.supabaseUrl;
+const supabaseKey = config.public.supabaseKey;
+
 const userStore = useUserStore()
 
 let products = ref(null)

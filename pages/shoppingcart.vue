@@ -164,6 +164,6 @@ const goToCheckout = () => {
 
     res.forEach(item => userStore.checkout.push(toRaw(item)))
 
-    return navigateTo('/checkout')
+    navigateTo('/checkout') // Ensure this line is executed
 }
 </script>

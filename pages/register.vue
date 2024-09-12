@@ -1,5 +1,5 @@
 <template>
-    <div id="AuthPage" class="w-full h-[100vh] bg-white">
+    <div id="RegisterPage" class="w-full h-[100vh] bg-white">
         <div class="w-full flex items-center justify-center p-5 border-b border-b-gray-300">
             <NuxtLink to="/" class="min-w-[170px]">
                 <img width="170" src="/AliExpress-logo.png">
@@ -7,9 +7,9 @@
         </div>
 
         <div class="max-w-[400px] mx-auto px-2">
-            <div class="text-center my-6">Login</div>
+            <div class="text-center my-6">Register</div>
 
-            <form @submit.prevent="handleAuth">
+            <form @submit.prevent="handleRegister">
                 <input 
                     v-model="email" 
                     type="email" 
@@ -20,7 +20,7 @@
                 <input 
                     v-model="password" 
                     type="password" 
-                    placeholder="Password" 
+                    placeholder="Password (min 6 characters)" 
                     class="w-full border p-2 mb-4"
                     required
                 />
@@ -29,21 +29,13 @@
                     type="submit" 
                     class="flex items-center justify-center gap-3 p-1.5 w-full border hover:bg-gray-100 rounded-full text-lg font-semibold"
                 >
-                    Submit
+                    Register
                 </button>
             </form>
             <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
 
-            <button 
-                @click="loginWithGoogle"
-                class="flex items-center justify-center gap-3 p-1.5 w-full border hover:bg-gray-100 rounded-full text-lg font-semibold mt-4"
-            >
-                <img class="w-full max-w-[30px]" src="/google-logo.png">
-                <div>Login with Google</div>
-            </button>
-
             <div class="mt-4 text-center">
-                <NuxtLink to="/register" class="text-blue-500">Don't have an account? Register here</NuxtLink>
+                <NuxtLink to="/auth" class="text-blue-500">Already have an account? Login here</NuxtLink>
             </div>
         </div>
     </div>
@@ -63,27 +55,16 @@ watchEffect(() => {
     }
 })
 
-const handleAuth = async () => {
-    const { data, error } = await client.auth.signInWithPassword({
+const handleRegister = async () => {
+    const { data, error } = await client.auth.signUp({
         email: email.value,
         password: password.value,
     });
 
     if (error) {
-        if (error.message.includes('invalid password')) {
-            errorMessage.value = 'You are already registered. Please enter the correct password.';
-        } else {
-            errorMessage.value = 'Login failed. Please check your credentials.';
-        }
+        errorMessage.value = 'Registration failed. Please check your credentials.';
     } else {
         navigateTo('/');
     }
-}
-
-const loginWithGoogle = async () => {
-    const { data, error } = await client.auth.signInWithOAuth({
-        provider: 'google',
-        redirectTo: window.location.origin
-    });
 }
 </script>

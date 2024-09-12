@@ -221,26 +221,32 @@ const stripeInit = async () => {
 }
 
 const pay = async () => {
-    if (currentAddress.value && currentAddress.value.data == '') {
-        showError('Please add shipping address')
-        return 
+    console.log('Current Address:', currentAddress.value);
+    console.log('Client Secret:', clientSecret);
+
+    if (!currentAddress.value || !currentAddress.value.data) {
+        showError('Please add shipping address');
+        return;
     }
-    isProcessing.value = true
-    
+
+    isProcessing.value = true;
+
     let result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: { card: card },
-    })
+    });
+
+    console.log('Payment Result:', result);
 
     if (result.error) {
         showError(result.error.message);
-        isProcessing.value = false
+        isProcessing.value = false;
     } else {
-        await createOrder(result.paymentIntent.id)
-        userStore.cart = []
-        userStore.checkout = []
+        await createOrder(result.paymentIntent.id);
+        userStore.cart = [];
+        userStore.checkout = [];
         setTimeout(() => {
-            return navigateTo('/success')
-        }, 500)
+            return navigateTo('/success');
+        }, 500);
     }
 }
 
