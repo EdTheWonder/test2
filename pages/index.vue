@@ -13,22 +13,11 @@
 <script setup>
 import MainLayout from '~/layouts/MainLayout.vue';
 import { useUserStore } from '~/stores/user';
-import { useRuntimeConfig } from '#app';
-
-const config = useRuntimeConfig();
-const supabaseUrl = config.public.supabaseUrl;
-const supabaseKey = config.public.supabaseKey;
-
 const userStore = useUserStore()
 
 let products = ref(null)
 onBeforeMount(async () => {
-    const response = await useFetch('/api/prisma/get-all-products');
-    if (response.error) {
-        console.error(response.error);
-    } else {
-        products.value = response.data;
-    }
-    setTimeout(() => userStore.isLoading = false, 1000);
+    products.value = await useFetch('/api/prisma/get-all-products')
+    setTimeout(() => userStore.isLoading = false, 1000)
 })
 </script>
