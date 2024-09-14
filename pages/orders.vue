@@ -12,6 +12,8 @@
                     class="text-sm pl-[50px]"
                 >
                     <div class="border-b py-1">
+                        <p>Order ID: {{ order.id }}</p>
+                        <p>User ID: {{ order.userId }}</p>
                         <p>Stripe ID: {{ order.stripeId }}</p>
 
                         <div class="pt-2"></div>
@@ -49,8 +51,12 @@ const user = useSupabaseUser()
 let orders = ref(null)
 
 onBeforeMount(async () => {
-    orders.value = await useFetch(`/api/prisma/get-all-orders-by-user/${user.value.id}`)
-})
+    if (user.value) {
+        orders.value = await useFetch(`/api/prisma/get-all-orders-by-user/${user.value.id}`);
+    } else {
+        navigateTo('/auth'); // Redirect to auth if user is not logged in
+    }
+});
 
 onMounted(() => {
     if (!user.value) {

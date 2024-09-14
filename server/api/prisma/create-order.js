@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     
     const order = await prisma.orders.create({
         data: {
-            userId: body.userId,
+            userId: body.userId, // Ensure this is set to the authenticated user's ID
             stripeId: body.stripeId,
             name: body.name,
             address: body.address,

@@ -153,17 +153,7 @@ const selectedRadioFunc = (e) => {
 }
 
 const goToCheckout = () => {
-    let ids = []
-    userStore.checkout = []
-
-    selectedArray.value.forEach(item => ids.push(item.id))
-
-    let res = userStore.cart.filter((item) => {
-        return ids.indexOf(item.id) != -1
-    })
-
-    res.forEach(item => userStore.checkout.push(toRaw(item)))
-
-    navigateTo('/checkout') // Ensure this line is executed
+    userStore.checkout = [...userStore.cart]; // Directly set checkout to all items in the cart
+    navigateTo('/checkout'); // Ensure this line is executed
 }
 </script>
